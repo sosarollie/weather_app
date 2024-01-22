@@ -35,6 +35,7 @@ export const App = () => {
         `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}&aqi=no`
       );
       const data = await response.json();
+      console.log(data);
       if (data.location.name) {
         setCityData(data);
         if (scale == "°C") {
@@ -69,6 +70,8 @@ export const App = () => {
           <button type="button" onClick={handleChangeToF}>
             °F
           </button>
+          <h3>{cityData.current.condition.text}</h3>
+          <img src={"https:" + cityData.current.condition.icon}></img>
         </div>
       )}
     </div>
