@@ -1,18 +1,21 @@
 import { useState } from "react";
 
+let scale = "°C";
 export const App = () => {
   const API_KEY = "ad7fa77616244e869a1110828231412";
 
-  const [city, setCity] = useState("La Plata");
+  const [city, setCity] = useState("");
   const [cityData, setCityData] = useState(null);
   const [temp, setTemp] = useState("");
 
   const handleChangeToF = () => {
     setTemp(parseInt(cityData.current.temp_f));
+    scale = "°F";
   };
 
   const handleChangeToC = () => {
     setTemp(parseInt(cityData.current.temp_c));
+    scale = "°C";
   };
 
   const handleNewCity = (e) => {
@@ -32,18 +35,28 @@ export const App = () => {
         `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}&aqi=no`
       );
       const data = await response.json();
-      console.log(data);
-      setCityData(data);
-      setTemp(data.current.temp_c);
+      if (data.location.name) {
+        setCityData(data);
+        if (scale == "°C") {
+          setTemp(data.current.temp_c);
+        } else {
+          setTemp(data.current.temp_f);
+        }
+      }
     } catch (error) {
-      console.error("Error:", error);
+      alert("City not found.", error);
     }
   };
 
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
-        <input type="text" value={city} onChange={handleNewCity}></input>
+        <input
+          type="text"
+          value={city}
+          onChange={handleNewCity}
+          placeholder="Enter a city"
+        ></input>
         <button type="submit">search</button>
       </form>
       {cityData && (
