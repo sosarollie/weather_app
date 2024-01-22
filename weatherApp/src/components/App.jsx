@@ -5,6 +5,15 @@ export const App = () => {
 
   const [city, setCity] = useState("La Plata");
   const [cityData, setCityData] = useState(null);
+  const [temp, setTemp] = useState("");
+
+  const handleChangeToF = () => {
+    setTemp(parseInt(cityData.current.temp_f));
+  };
+
+  const handleChangeToC = () => {
+    setTemp(parseInt(cityData.current.temp_c));
+  };
 
   const handleNewCity = (e) => {
     setCity(e.target.value);
@@ -25,6 +34,7 @@ export const App = () => {
       const data = await response.json();
       console.log(data);
       setCityData(data);
+      setTemp(data.current.temp_c);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -34,12 +44,18 @@ export const App = () => {
     <div className="container">
       <form onSubmit={handleSubmit}>
         <input type="text" value={city} onChange={handleNewCity}></input>
-        <button type="submit"></button>
+        <button type="submit">search</button>
       </form>
       {cityData && (
         <div>
           <h1>{cityData.location.name}</h1>
-          <h1>{parseInt(cityData.current.temp_c)}</h1>
+          <h1>{temp}</h1>
+          <button type="button" onClick={handleChangeToC}>
+            °C
+          </button>
+          <button type="button" onClick={handleChangeToF}>
+            °F
+          </button>
         </div>
       )}
     </div>
