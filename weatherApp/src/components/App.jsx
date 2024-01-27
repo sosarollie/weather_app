@@ -7,6 +7,7 @@ export const App = () => {
   const [city, setCity] = useState("");
   const [cityData, setCityData] = useState(null);
   const [temp, setTemp] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChangeToF = () => {
     setTemp(parseInt(cityData.current.temp_f));
@@ -31,6 +32,7 @@ export const App = () => {
 
   const handleFetch = async () => {
     try {
+      setLoading(true);
       const response = await fetch(
         `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}&aqi=no`
       );
@@ -46,6 +48,8 @@ export const App = () => {
       }
     } catch (error) {
       alert("City not found.", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,6 +63,43 @@ export const App = () => {
           placeholder="Enter a city"
         ></input>
         <button type="submit">search</button>
+        {loading ? (
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="4" cy="12" r="3">
+              <animate
+                id="spinner_jObz"
+                begin="0;spinner_vwSQ.end-0.25s"
+                attributeName="r"
+                dur="0.75s"
+                values="3;.2;3"
+              />
+            </circle>
+            <circle cx="12" cy="12" r="3">
+              <animate
+                begin="spinner_jObz.end-0.6s"
+                attributeName="r"
+                dur="0.75s"
+                values="3;.2;3"
+              />
+            </circle>
+            <circle cx="20" cy="12" r="3">
+              <animate
+                id="spinner_vwSQ"
+                begin="spinner_jObz.end-0.45s"
+                attributeName="r"
+                dur="0.75s"
+                values="3;.2;3"
+              />
+            </circle>
+          </svg>
+        ) : (
+          ""
+        )}
       </form>
       {cityData && (
         <div>
@@ -71,7 +112,7 @@ export const App = () => {
             °F
           </button>
           <h3>{cityData.current.condition.text}</h3>
-          <img src={"https:" + cityData.current.condition.icon}></img>
+          <img src={"https:" + cityData.current.condition.icon}></img>{" "}
         </div>
       )}
     </div>
