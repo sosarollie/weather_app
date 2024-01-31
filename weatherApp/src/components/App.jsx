@@ -65,10 +65,11 @@ export const App = () => {
         <button type="submit">search</button>
         {loading ? (
           <svg
-            width="24"
-            height="24"
+            height="50px"
+            width="50px"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
+            fill="#296161"
           >
             <circle cx="4" cy="12" r="3">
               <animate
